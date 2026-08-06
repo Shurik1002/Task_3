@@ -1,4 +1,3 @@
-import io.restassured.RestAssured;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -11,11 +10,10 @@ import pageobject.RegisterPage;
 import steps.UserSteps;
 import java.util.stream.Stream;
 import static driver.WebDriverCreator.createWebDriver;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Execution(ExecutionMode.CONCURRENT)
 @DisplayName("Функциональность: регистрация пользователя")
-public class SignUpTest {
+public class SignUpTest extends BaseBeforeAll {
 
     private static final String NAME = "Sasha";
     private static final String EMAIL1 = "shurikOk105@yandex.ru";
@@ -77,7 +75,6 @@ public class SignUpTest {
 
     @AfterAll
     public static void tearDown() {
-        RestAssured.baseURI = "https://qa-stellarburgers.education-services.ru";
         userSteps.deleteTestUser(EMAIL1, PASSWORD_6);
         userSteps.deleteTestUser(EMAIL2, PASSWORD_15);
 

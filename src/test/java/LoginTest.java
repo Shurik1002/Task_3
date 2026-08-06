@@ -1,4 +1,3 @@
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
@@ -12,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Execution(ExecutionMode.CONCURRENT)
 @DisplayName("Функциональность: авторизация пользователя")
-public class LoginTest {
+public class LoginTest extends BaseBeforeAll {
 
     private static String accessToken;
     private static String email;
@@ -34,7 +33,6 @@ public class LoginTest {
 
     @BeforeAll
     public static void setUp() {
-        RestAssured.baseURI = BASE_URI;
         email = userSteps.createEmail();
         password = userSteps.createPassword();
         Response response = userSteps.userRegister(new User(email, password, NAME));

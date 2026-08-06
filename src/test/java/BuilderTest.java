@@ -1,4 +1,3 @@
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
@@ -11,14 +10,13 @@ import static driver.WebDriverCreator.createWebDriver;
 
 @Execution(ExecutionMode.CONCURRENT)
 @DisplayName("Функциональность: конструктор")
-public class BuilderTest {
+public class BuilderTest extends BaseBeforeAll {
 
     private static String accessToken;
     private static String email;
     private static String password;
     private static final String NAME = "Sasha";
     private static final String BASE_URI = "https://qa-stellarburgers.education-services.ru";
-
     private static UserSteps userSteps = new UserSteps();
     private HomePage homePage;
     private WebDriver driver;
@@ -27,7 +25,6 @@ public class BuilderTest {
 
     @BeforeAll
     public static void setUp() {
-        RestAssured.baseURI = BASE_URI;
         email = userSteps.createEmail();
         password = userSteps.createPassword();
         Response response = userSteps.userRegister(new User(email, password, NAME));
@@ -46,8 +43,34 @@ public class BuilderTest {
     }
 
     @Test
-    @DisplayName("Переход на главную страницу через логотип: переключение меню кликом")
-    public void redirectOnHomePageAfterClickLogoAndClickMenu() {
+    @DisplayName("Переход на главную страницу через логотип: переключение на раздел Соусы")
+    public void redirectOnHomePageAfterClickLogoAndClickSause() {
+        homePage.clickLoginButton();
+        loginPage.setEmail(email);
+        loginPage.setPassword(password);
+        loginPage.clickLoginButton();
+        header.clickPersonalAccount();
+        header.clickLogo();
+        homePage.clickSauseButtonAndCheckNavigation();
+
+    }
+
+    @Test
+    @DisplayName("Переход на главную страницу через логотип: переключение на разел Начинки")
+    public void redirectOnHomePageAfterClickLogoAndClickFillings() {
+        homePage.clickLoginButton();
+        loginPage.setEmail(email);
+        loginPage.setPassword(password);
+        loginPage.clickLoginButton();
+        header.clickPersonalAccount();
+        header.clickLogo();
+        homePage.clickFillingsButtonAndCheckNavigation();
+
+    }
+
+    @Test
+    @DisplayName("Переход на главную страницу через логотип: переключение на раздел Булки")
+    public void redirectOnHomePageAfterClickLogoAndReturnToBuns() {
         homePage.clickLoginButton();
         loginPage.setEmail(email);
         loginPage.setPassword(password);
@@ -56,7 +79,6 @@ public class BuilderTest {
         header.clickLogo();
         homePage.checkBunSelected();
         homePage.clickSauseButtonAndCheckNavigation();
-        homePage.clickFillingsButtonAndCheckNavigation();
         homePage.clickBunButtonAndCheckNavigation();
 
     }
